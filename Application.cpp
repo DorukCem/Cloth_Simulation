@@ -1,11 +1,11 @@
 #include "Application.h"
 
-Application::Application() : cloth(5, 5, 100, 100, 100) {}
+Application::Application() : cloth(34, 34, 20, 100, 100) {}
 
 void Application::update()
 {
     float time_elapsed = clock.restart().asSeconds();
-    cloth.update(time_elapsed);
+    cloth.update(1.0f / 60.0f);
 }
 
 void Application::input()
@@ -69,7 +69,7 @@ void Application::draw()
     renderer.window.clear();
 
     renderer.draw_constraints(cloth.get_constraints());
-    renderer.draw_particles(cloth.get_particles());
+    //renderer.draw_particles(cloth.get_particles());
 
     renderer.window.display();
     

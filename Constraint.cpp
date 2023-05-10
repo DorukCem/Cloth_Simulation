@@ -26,7 +26,7 @@ Constraint::Constraint(Particle& p1, Particle& p2)
 	}
 	
 
-	initial_length = find_current_length();
+	initial_length = find_current_length() ;
 }
 
 float Constraint::find_current_length() const
@@ -36,15 +36,22 @@ float Constraint::find_current_length() const
 	return sqrtf(diff.x * diff.x + diff.y * diff.y);
 }
 
-void Constraint::update()
+void Constraint::solve()
 {
-	if (not is_active) { return ;}
+	if (broken) { return ;}
 
 	float current_length = find_current_length();
-	float diff_factor = (initial_length - current_length) / current_length;
-	sf::Vector2f offset = ( p1.get_position() - p2.get_position() ) * diff_factor * 0.5f;
+	
+	if (current_length > initial_length)
+	{
+		broken = current_length > initial_length * max_elongation_ratio;
+		
+		const sf::Vector2f diff = (p1.get_position() - p2.get_position()) / current_length;
+		const float offset = initial_length - current_length ;
+		const sf::Vector2f p = -(offset * strength) / (p1.mass + p2.mass) * diff;
 
-	p1.position += offset;
-	p2.position -= offset;
+		p1.move(-p / p1.mass);
+		p2.move( p / p2.mass);
+	}
 
 }

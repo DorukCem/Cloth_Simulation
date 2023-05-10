@@ -1,7 +1,9 @@
 #include "Cloth.h"
+#include <iostream>
 
 Cloth::Cloth(int width, int height, int spacing, int start_x, int start_y)
-    : gravity(0.0f, 981.0f), drag(0.01f), elasticity(10.0f)
+    : solver_iterations(1), sub_steps(16), gravity(0.0f, 1500.0f), friction_coef(0.5f)
+
 {
     for (int y = 0; y <= height; y++)
     {
@@ -24,7 +26,7 @@ Cloth::Cloth(int width, int height, int spacing, int start_x, int start_y)
             }
 
             // this can change
-            if (y == 0)
+            if (y == 0 and x%16 == 0)
             {
                 point->is_pinned = true;
             }
@@ -34,22 +36,59 @@ Cloth::Cloth(int width, int height, int spacing, int start_x, int start_y)
     }
 }
 
-const std::vector<Constraint*>& Cloth::get_constraints() const {
-    return m_constraints;
-}
 
-const std::vector<Particle*>& Cloth::get_particles() const {
-    return m_particles;
-}
 
 void Cloth::update(float dt) {
+    const float sub_step_dt = dt / static_cast<float>(sub_steps);
+
+    //removeBrokenLinks();
+    for (uint32_t i(sub_steps); i>0; i--)
+    {
+        
+        apply_gravity();
+        apply_air_friction();  
+        update_positions(sub_step_dt); // *****  
+        solve_constraints();  
+        update_derivatives(sub_step_dt);
+        
+    }
+}
+
+
+void Cloth::apply_gravity() {
     for (Particle* p : m_particles)
     {
-        p->accelerate(gravity);
+        p->add_force( gravity * p->mass );
+    }
+}
+
+void Cloth::apply_air_friction() {
+    for (Particle* p : m_particles)
+    {
+        p->add_force( -p->velocity * friction_coef);
+    }
+}
+
+void Cloth::update_positions(float dt) {
+    for (Particle* p : m_particles)
+    {
         p->update(dt);
     }
-    for (Constraint* c : m_constraints)
+}
+
+void Cloth::update_derivatives(float dt) {
+    for (Particle* p : m_particles)
     {
-        c->update();
+        p->update_velocity(dt);
+    }
+}
+
+void Cloth::solve_constraints() {
+    for (uint32_t i(solver_iterations); i>0 ; i--)
+    {
+        for (Constraint* c : m_constraints)
+        {
+            c->solve();
+        }
     }
 }

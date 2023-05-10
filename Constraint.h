@@ -9,12 +9,15 @@ public:
 
 	Particle &p1;
 	Particle &p2;
+	
 	float initial_length;
-	bool is_active = true;
+	float strength = 1.0f;
+	float max_elongation_ratio = 1.5f;
+	bool broken = false;
 	
 	Constraint(Particle& p1, Particle& p2);
 
 	float find_current_length() const;
 	
-	void update();
+	void solve();
 };
