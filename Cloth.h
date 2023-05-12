@@ -28,6 +28,8 @@ public:
     }
     
     void update(float dt);
+    void apply_force_on_cloth(sf::Vector2f position, float radius, sf::Vector2f force);
+    void tear_cloh(sf::Vector2f position, float radius);
 
 private:
     void apply_gravity();
@@ -35,5 +37,12 @@ private:
     void update_positions(float dt);
     void update_derivatives(float dt);
     void solve_constraints();
+    void remove_broken_links();
 
+    bool is_in_radius(const Particle* p, sf::Vector2f center, float radius) {
+        const sf::Vector2f v = center - p->get_position();
+        return (v.x * v.x + v.y * v.y) < radius * radius;
+    }
+
+   
 };

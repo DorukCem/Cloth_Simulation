@@ -24,3 +24,16 @@ void Particle::update_velocity(float dt)
 	forces = { 0.0f , 0.0f };
 }
 
+void Particle::break_particle()
+{
+	alive = false;
+	for (Constraint* c : constraints)
+	{
+		c->broken = true;
+	}
+}
+
+void Particle::add_constraint(Constraint* c)
+{
+	constraints.push_back(c);
+}

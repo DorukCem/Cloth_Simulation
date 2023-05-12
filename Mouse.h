@@ -3,20 +3,18 @@
 
 struct Mouse
 {
-	sf::Vector2i position;
-	sf::Vector2i prev_position;
+	sf::Vector2f position;
+	sf::Vector2f prev_position;
 
-	Mouse() :position({ 0,0 }), prev_position({ 0,0 }) {}
-
-	float cursor_size = 20;
+	Mouse() :position({ 0.0f,0.0f }), prev_position({ 0.0f,0.0f }) {}
 
 	bool left_button_down = false;
 	bool right_button_down = false;
 
-	void update_position(sf::Vector2i pos) { prev_position = position; position = pos; }
+	void update_position(sf::Vector2f pos) { prev_position = position; position = pos; }
 
-	const sf::Vector2i& get_position() const { return position; }
-	const sf::Vector2i& get_prev_position() const { return prev_position; }
+	const sf::Vector2f& get_position() const { return position; }
+	const sf::Vector2f& get_prev_position() const { return prev_position; }
 
 	bool get_left_button_down() const { return left_button_down; }
 	void set_left_button(bool state) { left_button_down = state; }

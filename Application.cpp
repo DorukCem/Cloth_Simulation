@@ -1,11 +1,28 @@
 #include "Application.h"
+#include <iostream>
 
-Application::Application() : cloth(34, 34, 20, 100, 100) {}
+Application::Application() : cloth(40, 30, 20, 400, 50) {} //60, 40
 
 void Application::update()
 {
-    float time_elapsed = clock.restart().asSeconds();
+    // Dragging
+    if (mouse.get_left_button_down())
+    {
+        const sf::Vector2f mouse_speed = mouse.get_position() - mouse.get_prev_position();
+        cloth.apply_force_on_cloth(mouse.get_position(), 100.0f, mouse_speed * 8000.0f);
+    }
+
+    // Erasing
+    if (mouse.get_right_button_down())
+    {
+        cloth.tear_cloh(mouse.get_position(), 10.0f);
+    }
+
     cloth.update(1.0f / 60.0f);
+
+    
+
+
 }
 
 void Application::input()
@@ -31,7 +48,7 @@ void Application::input()
 
         case sf::Event::MouseMoved:
 
-            mouse.update_position({ event.mouseMove.x, event.mouseMove.y });
+            mouse.update_position({ static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y) });
             break;
 
         case sf::Event::MouseButtonPressed:
@@ -65,11 +82,10 @@ void Application::input()
 
 void Application::draw()
 {
-   
     renderer.window.clear();
 
-    renderer.draw_constraints(cloth.get_constraints());
-    //renderer.draw_particles(cloth.get_particles());
+    //renderer.draw_constraints(cloth.get_constraints());
+    renderer.draw_particles(cloth.get_particles());
 
     renderer.window.display();
     

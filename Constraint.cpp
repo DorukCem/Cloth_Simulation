@@ -7,24 +7,8 @@ Constraint::Constraint(Particle& p1, Particle& p2)
 	:p1(p1), p2(p2)
 {
 	
-	if (p1.constraints[0] == nullptr)
-	{
-		p1.add_constraint(this, 0);
-	}
-	else
-	{
-		p1.add_constraint(this, 1);
-	}
-
-	if (p2.constraints[0] == nullptr)
-	{
-		p2.add_constraint(this, 0);
-	}
-	else
-	{
-		p2.add_constraint(this, 1);
-	}
-	
+	p1.add_constraint(this);
+	p2.add_constraint(this);
 
 	initial_length = find_current_length() ;
 }
@@ -36,15 +20,23 @@ float Constraint::find_current_length() const
 	return sqrtf(diff.x * diff.x + diff.y * diff.y);
 }
 
+bool Constraint::is_valid()
+{
+	return !broken and p1.alive and p2.alive;
+}
+
+
 void Constraint::solve()
 {
-	if (broken) { return ;}
+	if (!is_valid()) {  return ;}
 
 	float current_length = find_current_length();
-	
 	if (current_length > initial_length)
 	{
-		broken = current_length > initial_length * max_elongation_ratio;
+		if (current_length > initial_length * max_elongation_ratio)
+		{
+			broken = true;
+		}
 		
 		const sf::Vector2f diff = (p1.get_position() - p2.get_position()) / current_length;
 		const float offset = initial_length - current_length ;

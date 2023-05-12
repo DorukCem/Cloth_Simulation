@@ -2,7 +2,7 @@
 #include <iostream>
 
 Cloth::Cloth(int width, int height, int spacing, int start_x, int start_y)
-    : solver_iterations(1), sub_steps(16), gravity(0.0f, 1500.0f), friction_coef(0.5f)
+    : solver_iterations(1), sub_steps(16), gravity(0.0f, 1500.000f), friction_coef(0.5f)
 
 {
     for (int y = 0; y <= height; y++)
@@ -26,7 +26,7 @@ Cloth::Cloth(int width, int height, int spacing, int start_x, int start_y)
             }
 
             // this can change
-            if (y == 0 and x%16 == 0)
+            if (y == 0 and x%10 == 0)
             {
                 point->is_pinned = true;
             }
@@ -41,7 +41,7 @@ Cloth::Cloth(int width, int height, int spacing, int start_x, int start_y)
 void Cloth::update(float dt) {
     const float sub_step_dt = dt / static_cast<float>(sub_steps);
 
-    //removeBrokenLinks();
+    
     for (uint32_t i(sub_steps); i>0; i--)
     {
         
@@ -52,6 +52,8 @@ void Cloth::update(float dt) {
         update_derivatives(sub_step_dt);
         
     }
+
+
 }
 
 
@@ -92,3 +94,36 @@ void Cloth::solve_constraints() {
         }
     }
 }
+
+void Cloth::apply_force_on_cloth(sf::Vector2f position, float radius, sf::Vector2f force)
+{
+    for (Particle* p : m_particles)
+    {
+        if (is_in_radius(p, position, radius))
+        {
+            p->add_force(force);
+        }
+    }
+}
+
+void Cloth::remove_broken_links()
+{
+    for (Constraint* c : m_constraints)
+    {
+        ;
+    }
+}
+
+
+void Cloth::tear_cloh(sf::Vector2f position, float radius)
+{   
+    for (Particle* p : m_particles)
+    {
+        if (is_in_radius(p, position, radius))
+        {
+            p->break_particle();
+        }
+    }
+
+}
+
