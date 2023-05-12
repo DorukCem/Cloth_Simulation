@@ -3,7 +3,6 @@
 
 Cloth::Cloth(int width, int height, int spacing, int start_x, int start_y)
     : solver_iterations(1), sub_steps(16), gravity(0.0f, 1500.000f), friction_coef(0.5f)
-
 {
     for (int y = 0; y <= height; y++)
     {
@@ -25,7 +24,6 @@ Cloth::Cloth(int width, int height, int spacing, int start_x, int start_y)
                 m_constraints.push_back(c);
             }
 
-            // this can change
             if (y == 0 and x%10 == 0)
             {
                 point->is_pinned = true;
@@ -37,23 +35,16 @@ Cloth::Cloth(int width, int height, int spacing, int start_x, int start_y)
 }
 
 
-
 void Cloth::update(float dt) {
     const float sub_step_dt = dt / static_cast<float>(sub_steps);
-
-    
-    for (uint32_t i(sub_steps); i>0; i--)
-    {
-        
+    for (uint32_t i = sub_steps; i>0; i--)
+    { 
         apply_gravity();
         apply_air_friction();  
-        update_positions(sub_step_dt); // *****  
+        update_positions(sub_step_dt); 
         solve_constraints();  
         update_derivatives(sub_step_dt);
-        
     }
-
-
 }
 
 
@@ -95,6 +86,8 @@ void Cloth::solve_constraints() {
     }
 }
 
+// User applied force 
+
 void Cloth::apply_force_on_cloth(sf::Vector2f position, float radius, sf::Vector2f force)
 {
     for (Particle* p : m_particles)
@@ -106,14 +99,8 @@ void Cloth::apply_force_on_cloth(sf::Vector2f position, float radius, sf::Vector
     }
 }
 
-void Cloth::remove_broken_links()
-{
-    for (Constraint* c : m_constraints)
-    {
-        ;
-    }
-}
 
+// User tears cloth
 
 void Cloth::tear_cloh(sf::Vector2f position, float radius)
 {   
@@ -121,7 +108,7 @@ void Cloth::tear_cloh(sf::Vector2f position, float radius)
     {
         if (is_in_radius(p, position, radius))
         {
-            p->break_particle();
+            p->break_constraints();
         }
     }
 

@@ -6,12 +6,14 @@
 Constraint::Constraint(Particle& p1, Particle& p2)
 	:p1(p1), p2(p2)
 {
+	// p1 and and p2 will hold pointers to this constraint
 	
 	p1.add_constraint(this);
 	p2.add_constraint(this);
 
 	initial_length = find_current_length() ;
 }
+
 
 float Constraint::find_current_length() const
 {
@@ -20,15 +22,10 @@ float Constraint::find_current_length() const
 	return sqrtf(diff.x * diff.x + diff.y * diff.y);
 }
 
-bool Constraint::is_valid()
-{
-	return !broken and p1.alive and p2.alive;
-}
-
 
 void Constraint::solve()
 {
-	if (!is_valid()) {  return ;}
+	if (broken) {  return ;}
 
 	float current_length = find_current_length();
 	if (current_length > initial_length)

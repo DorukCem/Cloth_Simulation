@@ -8,6 +8,8 @@ Particle::Particle(float x, float y)
 	forces = {0.0f , 0.0f};
 }
 
+
+// Verlet integration 
 void Particle::update(float dt)
 {
 	if (is_pinned) {return;}
@@ -18,15 +20,16 @@ void Particle::update(float dt)
 	
 }
 
+// Verlet integration
 void Particle::update_velocity(float dt)
 {
 	velocity = (position - prev_position) / dt;
 	forces = { 0.0f , 0.0f };
 }
 
-void Particle::break_particle()
+
+void Particle::break_constraints()
 {
-	alive = false;
 	for (Constraint* c : constraints)
 	{
 		c->broken = true;

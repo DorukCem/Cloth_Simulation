@@ -6,12 +6,9 @@
 #include "Application.h"
 
 
-
 int main() {
 	
-
 	Application app;
-
 
 	while (app.is_running())
 	{
@@ -19,7 +16,6 @@ int main() {
 		app.update();
 		app.draw();
 	}
-
 
 return 0;
 }
