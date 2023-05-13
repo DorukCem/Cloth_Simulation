@@ -2,7 +2,7 @@
 
 Cloth simulation in C++ rendered using SFML
 
-Pyhsics are simulated using "Verlet Physics"
+Physics are simulated using "Verlet Physics"
 
 References: 
 
