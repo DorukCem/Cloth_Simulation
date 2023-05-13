@@ -7,7 +7,7 @@ Constraint::Constraint(Particle& p1, Particle& p2)
 	:p1(p1), p2(p2)
 {
 	// p1 and and p2 will hold pointers to this constraint
-	
+
 	p1.add_constraint(this);
 	p2.add_constraint(this);
 

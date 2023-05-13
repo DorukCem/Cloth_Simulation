@@ -1,7 +1,7 @@
 #include "Application.h"
 #include <iostream>
 
-Application::Application() : cloth(40, 30, 25 , 500, 50) {} // (node ammount width, node ammount height, spacing, start x, start y)
+Application::Application() : cloth(40, 30, 25 , 500, 50) {} // (node width, node height, spacing, start x, start y)
 
 void Application::update()
 {
@@ -9,7 +9,7 @@ void Application::update()
     if (mouse.get_left_button_down())
     {
         const sf::Vector2f mouse_speed = mouse.get_position() - mouse.get_prev_position();
-        cloth.apply_force_on_cloth(mouse.get_position(), 100.0f, mouse_speed * 8000.0f);
+        cloth.apply_force_on_cloth(mouse.get_position(), 100.0f, mouse_speed * 10000.0f);
     }
 
     // Tearing

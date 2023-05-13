@@ -10,6 +10,8 @@ Cloth::Cloth(int width, int height, int spacing, int start_x, int start_y)
         {
             Particle* point = new Particle(start_x + x * spacing, start_y + y * spacing);
 
+            // Connect new particle to the particle above it and next to it 
+
             if (x != 0)
             {
                 Particle* left_point = m_particles[m_particles.size() - 1];
@@ -24,7 +26,7 @@ Cloth::Cloth(int width, int height, int spacing, int start_x, int start_y)
                 m_constraints.push_back(c);
             }
 
-            if (y == 0 and x%10 == 0)
+            if (y == 0 and x%5 == 0)
             {
                 point->is_pinned = true;
             }

@@ -7,7 +7,7 @@ public:
 	
 	float drag = 0.01f;
 	float elasticity = 10.0f;
-	float mass = 2.0f;
+	float mass = 2.5f;
 
 	bool is_pinned = false;
 
