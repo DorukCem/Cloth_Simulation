@@ -5,7 +5,6 @@ Cloth simulation in C++ rendered using SFML
 Physics are simulated using "Verlet Physics"
 
 **Video of code in action** :
-
 [Youtube video](https://youtu.be/amXzH7ASuA8)
 
 References: 
